@@ -1,0 +1,20 @@
+<!-- views/pages/products.ejs -->
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/sidebar') %>
+
+<div class="content-wrapper">
+    <div class="container">
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <% products.forEach(product => { %>
+            <%- include('../partials/productCard', { product: product }) %>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
