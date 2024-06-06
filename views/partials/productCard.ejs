@@ -1,0 +1,22 @@
+<!-- views/partials/productCard.ejs -->
+<div class="col-md-4">
+  <div class="card mb-4">
+    <img src="<%= product.image %>" class="card-img-top product-image"
+      alt="<%= product.title %>">
+    <div class="card-body">
+      <h5 class="card-title"><%= product.title %></h5>
+      <p class="card-text"><%= product.description %></p>
+      <p class="card-text"><strong>Price:</strong> $<%= product.price %></p>
+      <p class="card-text"><strong>Category:</strong> <%= product.category
+        %></p>
+      <div class="d-flex justify-content-between">
+        <a href="/products/edit/<%= product.id %>"
+          class="btn btn-warning">Edit</a>
+        <form action="/products/delete/<%= product.id %>?_method=DELETE"
+          method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
