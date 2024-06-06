@@ -1,164 +1,110 @@
-Thank you for providing the `productService.js` file. Let's update the `README.md` file to include detailed information about the routes, their corresponding controller methods, and the services they use.
-
-```markdown
-# Pixi Agency
-
-Pixi Agency is a web application designed to [brief description of what your project does].
-
+# pixi-agency
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Folder Structure](#folder-structure)
+- [Environment Variables](#environment-variables)
+- [Configuration](#configuration)
 - [Routes](#routes)
-- [Features](#features)
+- [productService](#productservice)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
+
+## Package Information
+
+### Package Name
+pixi-agency
+
+### Version
+1.0.0
+
+### Description
+[Insert description of the package]
+
+### Dependencies
+
+The following dependencies are required to run the application:
+
+* `axios`: ^1.7.2
+* `colors`: ^1.4.0
+* `dotenv`: ^16.4.5
+* `ejs`: ^3.1.10
+* `express`: ^4.19.2
+* `method-override`: ^3.0.0
+
+### Scripts
+
+The following script is available:
+
+* `test`: Runs the test suite (currently not implemented)
+
+### Author
+Ahmed Rabie Mahmoud Mohamed
+
+### License
+ISC
 
 ## Installation
 
-To set up the project locally, follow these steps:
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/yourusername/pixi-agency.git
-    cd pixi-agency
-    ```
-
-2. Install the dependencies:
-
-    ```bash
-    npm install
-    ```
-
-3. Create a `.env` file in the root of your project and add necessary environment variables:
-
-    ```plaintext
-    PORT=3001
-    API_URL=https://fakestoreapi.com/products
-    ```
-
-4. Start the project:
-
-    ```bash
-    npm start
-    ```
+1. Clone the repository: `git clone https://github.com/your-username/pixi-agency.git`
+2. Navigate to the project directory: `cd pixi-agency`
+3. Install the dependencies: `npm install`
 
 ## Usage
 
-To use Pixi Agency, follow these steps:
+1. Start the application: `node index.js`
+2. Open your web browser and navigate to `http://localhost:3001`
 
-1. Start the server:
+## Environment Variables
 
-    ```bash
-    npm start
-    ```
+Create a `.env` file in the root of the project with the following variables:
 
-2. Open your web browser and navigate to `http://localhost:3001` (or the port specified in your `.env` file).
+* `PORT`: The port number to run the application on (default: 3001)
+* `API_URL`: The URL of the API (default: https://fakestoreapi.com/products)
 
-### Example
+Example `.env` file: PORT=3001 API_URL=https://fakestoreapi.com/products
 
-The `server.js` sets up an Express server with EJS as the templating engine. Below is a brief overview of the server setup:
+## Configuration
 
-```javascript
-const express = require("express");
-const path = require("path");
-const app = express();
-const productRoutes = require("./routes/products");
-const methodOverride = require("method-override");
-const colors = require("colors");
-require("dotenv").config();
+You can configure the application by creating a `config.js` file in the root of the project. This file should export an object with the following properties:
 
-app.use(express.json());
-app.set("view engine", "ejs");
+* `port`: The port number to run the application on (default: 3001)
+* `apiUrl`: The URL of the API (default: https://fakestoreapi.com/products)
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.set("views", path.join(__dirname, "views"));
-app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
+## Routes
 
-app.use("/products", productRoutes);
+The following routes are available in the application:
 
-app.use("/", (req, res) => {
-  res.status(404).render('index');
-});
+### Products Routes
 
-app.all("*", (req, res) => {
-  res.status(404).send({
-    apisStatus: false,
-    message: "Invalid URL",
-    data: {},
-  });
-});
+| Route | Method | Controller Method | Service Used |
+| --- | --- | --- | --- |
+| `/products` | GET | `getAllProducts` | `productService.fetchAllProducts` |
+| `/products/create` | GET | `createProductForm` | - |
+| `/products/create` | POST | `createProduct` | `productService.createProduct` |
+| `/products/edit/:id` | GET | `editProductForm` | `productService.fetchProductById` |
+| `/products/edit/:id` | POST | `updateProduct` | `productService.updateProduct` |
+| `/products/:id/delete` | POST | `deleteProduct` | `productService.deleteProduct` |
+| `/products/statistics` | GET | `renderStatisticsPage` | (TBD: productService method for fetching statistics data) |
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
+## productService
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`http://localhost:${PORT}`.bold.brightBlue.underline)
-);
-```
+The `productService` module provides the following methods for interacting with the API:
 
-## Folder Structure
+### Methods
 
-The project directory is structured as follows:
+* `fetchAllProducts()`: Fetches all products from the API
+* `fetchProductById(id)`: Fetches a product by ID from the API
+* `createProduct(productData)`: Creates a new product in the API
+* `updateProduct(id, productData)`: Updates a product in the API
+* `deleteProduct(id)`: Deletes a product from the API
 
-```
-project-directory/
-│
-├── views/
-│   ├── partials/
-│   │   ├── header.ejs
-│   │   ├── footer.ejs
-│   │   ├── navbar.ejs
-│   │   ├── sidebar.ejs
-│   ├── pages/
-│   │   ├── create.ejs
-│   │   ├── edit.ejs
-│   │   ├── statistics.ejs
-│   ├── index.ejs
-│
-├── routes/
-│   ├── products.js
-│
-├── controllers/
-│   ├── productController.js
-│
-├── services/
-│   ├── productService.js
-│
-├── public/
-│   ├── dist/
-│   ├── plugins/
-│   ├── js/
-│   │   ├── charts.js
-│
-├── server.js
-│
-├── package.json
-```
+These methods are used by the `productController` to perform CRUD operations on products.
 
-- **views/**: Contains EJS templates for the view layer.
-  - **partials/**: Common partial templates like header, footer, navbar, and sidebar.
-  - **pages/**: Specific pages for create, edit, and statistics.
-  - **index.ejs**: Main index template.
-- **routes/**: Contains route definitions.
-  - **products.js**: Routes related to products.
-- **controllers/**: Contains controller logic.
-  - **productController.js**: Controller for handling product-related logic.
-- **services/**: Contains service logic.
-  - **productService.js**: Service for product-related operations.
-- **public/**: Contains static assets.
-  - **dist/**: Compiled assets.
-  - **plugins/**: Plugins for the frontend.
-  - **js/**: JavaScript files.
-    - **charts.js**: JavaScript for charts.
-- **server.js**: Main server file.
-- **package.json**: Project
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+
+This project is licensed under the ISC License.
